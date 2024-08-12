@@ -66,24 +66,24 @@ public abstract class LodestoneBlockStateProvider extends BlockStateProvider {
     public ModelFile grassBlockModel(Block block) {
         String name = getBlockName(block);
         ResourceLocation side = getBlockTexture(name);
-        ResourceLocation dirt = new ResourceLocation("block/dirt");
+        ResourceLocation dirt = ResourceLocation.withDefaultNamespace("block/dirt");
         ResourceLocation top = getBlockTexture(name + "_top");
         return models().cubeBottomTop(name, side, dirt, top);
     }
 
     public ModelFile leavesBlockModel(Block block) {
         String name = getBlockName(block);
-        return models().withExistingParent(name, new ResourceLocation("block/leaves")).texture("all", getBlockTexture(name));
+        return models().withExistingParent(name, ResourceLocation.withDefaultNamespace("block/leaves")).texture("all", getBlockTexture(name));
     }
 
     public ModelFile airModel(Block block) {
         String name = getBlockName(block);
-        return models().withExistingParent(name, new ResourceLocation("block/air"));
+        return models().withExistingParent(name, ResourceLocation.withDefaultNamespace("block/air"));
     }
 
     public ModelFile cubeModelAirTexture(Block block) {
         String name = getBlockName(block);
-        return models().cubeAll(name, new ResourceLocation("block/air"));
+        return models().cubeAll(name, ResourceLocation.withDefaultNamespace("block/air"));
     }
 
     public String getBlockName(Block block) {
@@ -105,6 +105,6 @@ public abstract class LodestoneBlockStateProvider extends BlockStateProvider {
 
     //TODO: move this to some sorta ResourceLocationHelper if it ever becomes needed.
     public ResourceLocation extend(ResourceLocation resourceLocation, String suffix) {
-        return new ResourceLocation(resourceLocation.getNamespace(), resourceLocation.getPath() + suffix);
+        return ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), resourceLocation.getPath() + suffix);
     }
 }

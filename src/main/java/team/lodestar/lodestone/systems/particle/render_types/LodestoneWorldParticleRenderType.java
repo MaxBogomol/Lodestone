@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import team.lodestar.lodestone.handlers.*;
 import team.lodestar.lodestone.registry.client.*;
@@ -50,13 +51,14 @@ public class LodestoneWorldParticleRenderType implements ParticleRenderType {
 
     public static final ParticleRenderType IRIS_ADDITIVE = new ParticleRenderType() {
 
+        @Nullable
         @Override
-        public void begin(BufferBuilder builder, TextureManager manager) {
+        public BufferBuilder begin(Tesselator tesselator, TextureManager textureManager) {
             RenderSystem.depthMask(false);
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
-            builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+            return tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
 
         @Override
@@ -92,15 +94,18 @@ public class LodestoneWorldParticleRenderType implements ParticleRenderType {
         this.blendFunction = blendFunction;
     }
 
+    @Nullable
     @Override
-    public void begin(BufferBuilder builder, TextureManager manager) {
+    public BufferBuilder begin(Tesselator tesselator, TextureManager textureManager) {
         RenderSystem.enableDepthTest();
         RenderSystem.enableBlend();
         blendFunction.run();
         RenderSystem.setShader(shader);
         RenderSystem.setShaderTexture(0, texture);
-        builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
+        return tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
     }
+
+
 
     @Override
     public void end(Tesselator pTesselator) {
@@ -118,4 +123,6 @@ public class LodestoneWorldParticleRenderType implements ParticleRenderType {
         final LodestoneRenderType renderType = LodestoneRenderTypeRegistry.copyAndStore(original, original.renderType, original.equals(LUMITRANSPARENT) ? ShaderUniformHandler.LUMITRANSPARENT_DEPTH_FADE : ShaderUniformHandler.DEPTH_FADE);
         return new LodestoneWorldParticleRenderType(renderType, original.shader, original.texture, original.blendFunction);
     }
+
+
 }

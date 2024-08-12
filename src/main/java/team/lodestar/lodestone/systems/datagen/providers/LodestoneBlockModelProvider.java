@@ -44,21 +44,21 @@ public final class LodestoneBlockModelProvider extends BlockModelProvider {
     @Override
     public BlockModelBuilder getBuilder(String path) {
         Preconditions.checkNotNull(path, "Path must not be null");
-        ResourceLocation outputLoc = extendWithFolder(path.contains(":") ? new ResourceLocation(path) : new ResourceLocation(modid, path));
+        ResourceLocation outputLoc = extendWithFolder(path.contains(":") ? ResourceLocation.parse(path) : ResourceLocation.fromNamespaceAndPath(modid, path));
         this.existingFileHelper.trackGenerated(outputLoc, MODEL);
         return generatedModels.computeIfAbsent(outputLoc, factory);
     }
 
     @Override
     public BlockModelBuilder nested() {
-        return factory.apply(new ResourceLocation("dummy:dummy"));
+        return factory.apply(ResourceLocation.parse("dummy:dummy"));
     }
 
     public ResourceLocation extendWithFolder(ResourceLocation rl) {
         if (rl.getPath().contains("/")) {
             return rl;
         }
-        return new ResourceLocation(rl.getNamespace(), folder + "/" + rl.getPath());
+        return ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), folder + "/" + rl.getPath());
     }
 
     private static class LodestoneBlockModelBuilder extends BlockModelBuilder {
@@ -76,7 +76,7 @@ public final class LodestoneBlockModelProvider extends BlockModelProvider {
             ResourceLocation actualLocation = texture;
             if (!texture.getNamespace().equals(ResourceLocation.DEFAULT_NAMESPACE) && !provider.staticTextures.contains(texture)) {
                 String actualPath = texture.getPath().replace("block/", "block/" + LodestoneBlockStateProvider.getTexturePath());
-                actualLocation = new ResourceLocation(texture.getNamespace(), actualPath);
+                actualLocation = ResourceLocation.fromNamespaceAndPath(texture.getNamespace(), actualPath);
             }
             BLOCK_TEXTURE_CACHE.put(key, actualLocation);
             return super.texture(key, actualLocation);

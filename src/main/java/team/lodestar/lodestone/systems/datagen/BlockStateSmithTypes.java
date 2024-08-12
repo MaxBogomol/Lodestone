@@ -164,7 +164,7 @@ public class BlockStateSmithTypes {
         String name = provider.getBlockName(block);
         ResourceLocation texture = provider.getBlockTexture(name.replace("_button", ""));
         provider.buttonBlock(block, texture);
-        provider.models().withExistingParent(name + "_inventory", new ResourceLocation("block/button_inventory")).texture("texture", texture);
+        provider.models().withExistingParent(name + "_inventory", ResourceLocation.withDefaultNamespace("block/button_inventory")).texture("texture", texture);
     });
 
     /**

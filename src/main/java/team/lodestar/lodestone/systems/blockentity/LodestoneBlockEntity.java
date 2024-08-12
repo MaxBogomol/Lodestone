@@ -102,12 +102,12 @@ public class LodestoneBlockEntity extends BlockEntity implements BlockEntityExte
 
     // Special handling for client update packets
     public void readClient(CompoundTag tag, HolderLookup.Provider provider) {
-        load(tag);
+        loadAdditional(tag, provider);
     }
 
     // Special handling for client update packets
-    public CompoundTag writeClient(CompoundTag tag) {
-        saveAdditional(tag);
+    public CompoundTag writeClient(CompoundTag tag, HolderLookup.Provider provider) {
+        saveAdditional(tag, provider);
         return tag;
     }
 
@@ -126,13 +126,15 @@ public class LodestoneBlockEntity extends BlockEntity implements BlockEntityExte
     }
 
     @Override
-    public void deserializeNBT(BlockState state, CompoundTag nbt) {
-        this.load(nbt);
+    public void deserializeNBT(BlockState state, CompoundTag nbt, HolderLookup.Provider provider) {
+        this.loadAdditional(nbt, provider);
     }
 
     public InteractionResult onUseWithoutItem(Player pPlayer) {
+        return InteractionResult.PASS;
     }
 
     public ItemInteractionResult onUseWithItem(Player pPlayer, ItemStack pStack, InteractionHand pHand) {
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 }

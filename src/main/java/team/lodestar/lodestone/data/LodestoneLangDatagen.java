@@ -3,24 +3,26 @@ package team.lodestar.lodestone.data;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import team.lodestar.lodestone.helpers.DataHelper;
 import team.lodestar.lodestone.registry.common.LodestoneAttributeRegistry;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import static team.lodestar.lodestone.LodestoneLib.LODESTONE;
 
 public class LodestoneLangDatagen extends FabricLanguageProvider {
 
-    protected LodestoneLangDatagen(FabricDataOutput dataOutput) {
-        super(dataOutput, "en_us");
+
+    protected LodestoneLangDatagen(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
+        super(dataOutput, registryLookup);
     }
 
-
     @Override
-    public void generateTranslations(TranslationBuilder builder) {
+    public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder builder) {
         Set<RegistryObject<Attribute>> attributes = new HashSet<>(LodestoneAttributeRegistry.ATTRIBUTES.getEntries());
 
         attributes.forEach(a -> {
@@ -60,6 +62,7 @@ public class LodestoneLangDatagen extends FabricLanguageProvider {
     public static String getOptionTooltip(String option) {
         return "options." + LODESTONE + "." + option + ".tooltip";
     }
+
 
 
 
