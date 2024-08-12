@@ -1,6 +1,7 @@
 package team.lodestar.lodestone.systems.multiblock;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -27,18 +28,20 @@ public class MultiBlockComponentEntity extends LodestoneBlockEntity {
         super(LodestoneBlockEntityRegistry.MULTIBLOCK_COMPONENT.get(), pos, state);
     }
 
+
+
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         if (corePos != null) {
             BlockHelper.saveBlockPos(tag, corePos, "core_position_");
         }
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, provider);
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         corePos = BlockHelper.loadBlockPos(tag, "core_position_");
-        super.load(tag);
+        super.loadAdditional(tag, provider);
     }
 
     @Override

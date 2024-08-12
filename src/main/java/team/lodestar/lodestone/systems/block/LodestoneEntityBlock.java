@@ -4,6 +4,7 @@ import io.github.fabricators_of_create.porting_lib.blocks.extensions.OnExplodedB
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -11,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.lodestar.lodestone.systems.blockentity.LodestoneBlockEntity;
 
@@ -68,22 +71,23 @@ public class LodestoneEntityBlock<T extends LodestoneBlockEntity> extends Block 
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-        if (hasTileEntity(state)) {
-            if (level.getBlockEntity(pos) instanceof LodestoneBlockEntity simpleBlockEntity) {
-                ItemStack stack = simpleBlockEntity.onClone(state, level, pos);
+    public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+        if (hasTileEntity(blockState)) {
+            if (levelReader.getBlockEntity(blockPos) instanceof LodestoneBlockEntity simpleBlockEntity) {
+                ItemStack stack = simpleBlockEntity.onClone(blockState, levelReader, blockPos);
                 if (!stack.isEmpty()) {
                     return stack;
                 }
             }
         }
-        return super.getCloneItemStack(level, pos, state);
+        return super.getCloneItemStack(levelReader, blockPos, blockState);
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    @NotNull
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         onBlockBroken(state, level, pos, player);
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
 
@@ -124,12 +128,23 @@ public class LodestoneEntityBlock<T extends LodestoneBlockEntity> extends Block 
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
-        if (hasTileEntity(state)) {
-            if (level.getBlockEntity(pos) instanceof LodestoneBlockEntity simpleBlockEntity) {
-                return simpleBlockEntity.onUse(player, hand);
+    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHitResult) {
+        if (hasTileEntity(pState)) {
+            if (pLevel.getBlockEntity(pPos) instanceof LodestoneBlockEntity simpleBlockEntity) {
+                return simpleBlockEntity.onUseWithoutItem(pPlayer);
             }
         }
-        return super.use(state, level, pos, player, hand, ray);
+        return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult);
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack pStack, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHitResult) {
+        if (hasTileEntity(pState)) {
+            if (pLevel.getBlockEntity(pPos) instanceof LodestoneBlockEntity simpleBlockEntity) {
+                return simpleBlockEntity.onUseWithItem(pPlayer, pStack, pHand);
+
+            }
+        }
+        return super.useItemOn(pStack, pState, pLevel, pPos, pPlayer, pHand, pHitResult);
     }
 }

@@ -1,6 +1,7 @@
 package team.lodestar.lodestone.systems.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -32,14 +33,14 @@ public abstract class ItemHolderBlockEntity extends LodestoneBlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound) {
+    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider) {
         compound.put("Inventory", inventory.serializeNBT());
-        super.saveAdditional(compound);
+        super.saveAdditional(compound, provider);
     }
 
     @Override
-    public void load(CompoundTag compound) {
+    public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
         inventory.deserializeNBT(compound.getCompound("Inventory"));
-        super.load(compound);
+        super.loadAdditional(compound, provider);
     }
 }

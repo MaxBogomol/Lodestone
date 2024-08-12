@@ -27,11 +27,11 @@ public class LodestoneItemTags {
     public static final TagKey<Item> INGOTS_TIN = forgeTag("ingots/tin");
 
     public static TagKey<Item> modTag(String path) {
-        return TagKey.create(Registries.ITEM, new ResourceLocation(path));
+        return TagKey.create(Registries.ITEM, ResourceLocation.parse(path));
     }
 
     public static TagKey<Item> forgeTag(String name) {
-        return create(new ResourceLocation("c", name));
+        return create(ResourceLocation.fromNamespaceAndPath("c", name));
     }
 
     public static TagKey<Item> create(final ResourceLocation name) {

@@ -8,11 +8,11 @@ import net.minecraft.world.level.block.Block;
 public class LodestoneBlockTags {
 
     public static TagKey<Block> modTag(String path) {
-        return TagKey.create(Registries.BLOCK, new ResourceLocation(path));
+        return TagKey.create(Registries.BLOCK, ResourceLocation.parse(path));
     }
 
     public static TagKey<Block> forgeTag(String name) {
-        return create(new ResourceLocation("c", name));
+        return create(ResourceLocation.fromNamespaceAndPath("c", name));
     }
 
     public static TagKey<Block> create(final ResourceLocation name) {

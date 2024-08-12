@@ -5,7 +5,6 @@ import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingHu
 import io.github.fabricators_of_create.porting_lib.tags.data.DataGenerators;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -54,7 +53,7 @@ public class LodestoneLib implements ModInitializer {
     public static final RandomSource RANDOM = RandomSource.create();
 
     public static ResourceLocation lodestonePath(String path) {
-        return new ResourceLocation(LODESTONE, path);
+        return ResourceLocation.fromNamespaceAndPath(LODESTONE, path);
     }
 
     @Override
@@ -64,7 +63,6 @@ public class LodestoneLib implements ModInitializer {
         LodestoneCommandRegistry.registerCommands();
         LodestonePlacementFillerRegistry.registerTypes();
         LodestonePacketRegistry.registerPackets();
-        LodestonePaintingRegistry.register();
 
         LodestoneBlockEntityRegistry.BLOCK_ENTITY_TYPES.register();
         LodestoneParticleRegistry.PARTICLES.register();

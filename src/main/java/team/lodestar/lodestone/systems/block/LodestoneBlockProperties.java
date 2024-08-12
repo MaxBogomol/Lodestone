@@ -58,7 +58,7 @@ public class LodestoneBlockProperties extends BlockBehaviour.Properties {
         properties.ignitedByLava = pBlockBehaviour.properties.ignitedByLava;
         properties.forceSolidOn = pBlockBehaviour.properties.forceSolidOn;
         properties.pushReaction = pBlockBehaviour.properties.pushReaction;
-        properties.spawnParticlesOnBreak = pBlockBehaviour.properties.spawnParticlesOnBreak;
+        properties.spawnTerrainParticles = pBlockBehaviour.properties.spawnTerrainParticles;
         properties.instrument = pBlockBehaviour.properties.instrument;
         properties.replaceable = pBlockBehaviour.properties.replaceable;
         properties.isValidSpawn = pBlockBehaviour.properties.isValidSpawn;

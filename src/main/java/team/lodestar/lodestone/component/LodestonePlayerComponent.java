@@ -1,14 +1,15 @@
 package team.lodestar.lodestone.component;
 
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import team.lodestar.lodestone.network.interaction.UpdateLeftClickPacket;
 import team.lodestar.lodestone.network.interaction.UpdateRightClickPacket;
 import team.lodestar.lodestone.registry.common.LodestonePacketRegistry;
@@ -42,13 +43,13 @@ public class LodestonePlayerComponent implements AutoSyncedComponent {
     }
 
     @Override
-    public void readFromNbt(CompoundTag tag) {
+    public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         hasJoinedBefore = tag.getBoolean("firstTimeJoin");
 
     }
 
     @Override
-    public void writeToNbt(CompoundTag tag) {
+    public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         tag.putBoolean("firstTimeJoin", hasJoinedBefore);
     }
 

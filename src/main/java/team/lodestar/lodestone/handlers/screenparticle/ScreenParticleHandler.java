@@ -99,9 +99,9 @@ public class ScreenParticleHandler {
         pullFromParticleVault(cacheKey, stack, target, isRenderedAfterItem);
         if (canSpawnParticles) {
             if (isRenderedAfterItem) {
-                emitter.spawnLateParticles(target, level, Minecraft.getInstance().timer.partialTick, stack, currentItemX, currentItemY);
+                emitter.spawnLateParticles(target, level, Minecraft.getInstance().getTimer().getGameTimeDeltaTicks(), stack, currentItemX, currentItemY);//TODO maybe wrong partial
             } else {
-                emitter.spawnEarlyParticles(target, level, Minecraft.getInstance().timer.partialTick, stack, currentItemX, currentItemY);
+                emitter.spawnEarlyParticles(target, level, Minecraft.getInstance().getTimer().getGameTimeDeltaTicks(), stack, currentItemX, currentItemY);
             }
         }
         ACTIVELY_ACCESSED_KEYS.add(cacheKey);

@@ -76,7 +76,7 @@ public abstract class WorldEventInstance {
 
     public WorldEventInstance deserializeNBT(CompoundTag tag) {
         uuid = tag.getUUID("uuid");
-        type = LodestoneWorldEventTypeRegistry.EVENT_TYPES.get(new ResourceLocation(tag.getString("type")));
+        type = LodestoneWorldEventTypeRegistry.EVENT_TYPES.get(ResourceLocation.parse(tag.getString("type")));
         discarded = tag.getBoolean("discarded");
         frozen = tag.getBoolean("frozen");
         return this;

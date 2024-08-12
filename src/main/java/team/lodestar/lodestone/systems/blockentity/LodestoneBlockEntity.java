@@ -7,12 +7,14 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -60,9 +62,9 @@ public class LodestoneBlockEntity extends BlockEntity implements BlockEntityExte
     }
 
     @Override
-    public void load(CompoundTag pTag) {
+    protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
         needsSync = true;
-        super.load(pTag);
+        super.loadAdditional(compoundTag, provider);
     }
 
     public void tick() {
@@ -78,7 +80,7 @@ public class LodestoneBlockEntity extends BlockEntity implements BlockEntityExte
 
     //Sync
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
         return writeClient(new CompoundTag());
     }
 
@@ -99,7 +101,7 @@ public class LodestoneBlockEntity extends BlockEntity implements BlockEntityExte
     }
 
     // Special handling for client update packets
-    public void readClient(CompoundTag tag) {
+    public void readClient(CompoundTag tag, HolderLookup.Provider provider) {
         load(tag);
     }
 
@@ -126,5 +128,11 @@ public class LodestoneBlockEntity extends BlockEntity implements BlockEntityExte
     @Override
     public void deserializeNBT(BlockState state, CompoundTag nbt) {
         this.load(nbt);
+    }
+
+    public InteractionResult onUseWithoutItem(Player pPlayer) {
+    }
+
+    public ItemInteractionResult onUseWithItem(Player pPlayer, ItemStack pStack, InteractionHand pHand) {
     }
 }

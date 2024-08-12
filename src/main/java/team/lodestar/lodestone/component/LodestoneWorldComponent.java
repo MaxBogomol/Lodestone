@@ -1,9 +1,10 @@
 package team.lodestar.lodestone.component;
 
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
-import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
+import org.ladysnake.cca.api.v3.component.tick.CommonTickingComponent;
 import team.lodestar.lodestone.handlers.WorldEventHandler;
 import team.lodestar.lodestone.systems.worldevent.WorldEventInstance;
 
@@ -28,12 +29,12 @@ public class LodestoneWorldComponent implements AutoSyncedComponent, CommonTicki
     }
 
     @Override
-    public void readFromNbt(CompoundTag nbt) {
+    public void readFromNbt(CompoundTag nbt, HolderLookup.Provider registryLookup) {
         WorldEventHandler.deserializeNBT(this, nbt);
     }
 
     @Override
-    public void writeToNbt(CompoundTag nbt) {
+    public void writeToNbt(CompoundTag nbt, HolderLookup.Provider registryLookup) {
         WorldEventHandler.serializeNBT(this, nbt);
     }
 }

@@ -10,7 +10,7 @@ import team.lodestar.lodestone.systems.blockentity.LodestoneSignBlockEntity;
 
 public class LodestoneWallSignBlock extends WallSignBlock implements EntityBlock {
     public LodestoneWallSignBlock(Properties properties, WoodType type) {
-        super(properties, type);
+        super(type, properties);
     }
 
     @Override
