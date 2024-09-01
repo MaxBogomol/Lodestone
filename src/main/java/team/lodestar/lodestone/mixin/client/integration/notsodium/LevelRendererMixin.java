@@ -12,9 +12,11 @@ import team.lodestar.lodestone.events.Stage;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
-
-    @Inject(method = "renderChunkLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;clearRenderState()V"))
-    private void lodestone$injectEvent6(RenderType renderType, PoseStack poseStack, double camX, double camY, double camZ, Matrix4f projectionMatrix, CallbackInfo ci){
+/*
+    @Inject(method = "renderSectionLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderType;clearRenderState()V"))
+    private void lodestone$injectEvent6(RenderType renderType, double d, double e, double f, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci){
         LodestoneRenderEvents.BEFORE_CLEAR.invoker().render(renderType, poseStack, Stage.AFTER_SOLID_BLOCKS);
     }
+
+ */
 }

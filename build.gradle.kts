@@ -111,7 +111,7 @@ tasks {
     }
 
     compileJava{
-        targetCompatibility = "17"
+        targetCompatibility = "21"
     }
 
 }

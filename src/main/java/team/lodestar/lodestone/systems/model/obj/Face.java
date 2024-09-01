@@ -36,7 +36,6 @@ public record Face(List<Vertex> vertices) {
 
     private void addVertex(VertexConsumer buffer, Vertex vertex, PoseStack poseStack, int packedLight) {
         Matrix4f matrix4f = poseStack.last().pose();
-        Matrix3f normalMatrix = poseStack.last().normal();
 
         Vector3f position = vertex.position();
         Vector3f normal = vertex.normal();
@@ -46,7 +45,7 @@ public record Face(List<Vertex> vertices) {
                 .setColor(255, 255, 255, 255)
                 .setUv(uv.x, -uv.y)
                 .setOverlay(OverlayTexture.NO_OVERLAY)
-                .setNormal(normalMatrix, normal.x(), normal.y(), normal.z())
+                .setNormal(poseStack.last(), normal.x(), normal.y(), normal.z())
                 .setLight(packedLight);
     }
 

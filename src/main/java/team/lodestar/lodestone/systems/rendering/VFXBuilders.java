@@ -45,7 +45,8 @@ public class VFXBuilders {
         Supplier<ShaderInstance> shader = GameRenderer::getPositionTexShader;
         ResourceLocation texture;
         ScreenVertexPlacementSupplier supplier;
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        Tesselator tesselator;
+        VertexFormat.Mode mode = VertexFormat.Mode.QUADS;
 
         public ScreenVFXBuilder setPosTexDefaultFormat() {
             supplier = (b, l, x, y, u, v) -> b.addVertex(l, x, y, this.zLevel).setUv(u, v);
@@ -96,8 +97,8 @@ public class VFXBuilders {
             return this;
         }
 
-        public ScreenVFXBuilder overrideBufferBuilder(BufferBuilder builder) {
-            this.bufferbuilder = builder;
+        public ScreenVFXBuilder overrideTessellator(Tesselator tesselator) {
+            this.tesselator = tesselator;
             return this;
         }
 
@@ -192,6 +193,7 @@ public class VFXBuilders {
             if (texture != null) {
                 RenderSystem.setShaderTexture(0, texture);
             }
+            var bufferbuilder = tesselator.begin(mode, format);
             supplier.placeVertex(bufferbuilder, last, x0, y1, u0, v1);
             supplier.placeVertex(bufferbuilder, last, x1, y1, u1, v1);
             supplier.placeVertex(bufferbuilder, last, x1, y0, u1, v0);
@@ -200,8 +202,8 @@ public class VFXBuilders {
         }
 
         public ScreenVFXBuilder draw(PoseStack stack) {
-            if (bufferbuilder.building()) {
-                bufferbuilder.end();
+            if (tesselator.begin(mode, format).building()) {
+                BufferUploader.drawWithShader(tesselator.begin(mode, format).buildOrThrow());
             }
             begin();
             blit(stack);
@@ -214,13 +216,13 @@ public class VFXBuilders {
         }
 
         public ScreenVFXBuilder begin() {
-            bufferbuilder.begin(VertexFormat.Mode.QUADS, format);
+            tesselator.begin(mode, format);
             return this;
         }
 
         public ScreenVFXBuilder end() {
             //bufferbuilder.end();
-            BufferUploader.drawWithShader(bufferbuilder.end());
+            BufferUploader.drawWithShader(tesselator.begin(mode, format).buildOrThrow());
             return this;
         }
 

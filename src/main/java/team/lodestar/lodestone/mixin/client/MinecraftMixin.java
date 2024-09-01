@@ -2,11 +2,13 @@ package team.lodestar.lodestone.mixin.client;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.GameConfig;
 import net.minecraft.client.player.LocalPlayer;
 
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,11 +25,6 @@ public abstract class MinecraftMixin {
     @Shadow
     public abstract boolean isPaused();
 
-    @Shadow
-    private float pausePartialTick;
-
-    @Shadow
-    public abstract float getFrameTime();
 
     @Shadow
     @Nullable
@@ -35,9 +32,13 @@ public abstract class MinecraftMixin {
 
     @Shadow public abstract RenderTarget getMainRenderTarget();
 
-    @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;render(FJZ)V"))
+    @Shadow @Final private DeltaTracker.Timer timer;
+
+    @Shadow public abstract long getFrameTimeNs();
+
+    @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;render(Lnet/minecraft/client/DeltaTracker;Z)V"))
     private void onFrameStart(boolean tick, CallbackInfo ci) {
-        ClientTickCounter.renderTick(isPaused() ? pausePartialTick : getFrameTime());
+        ClientTickCounter.renderTick(isPaused() ? timer.getGameTimeDeltaTicks() : getFrameTimeNs());
     }
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;registerReloadListener(Lnet/minecraft/server/packs/resources/PreparableReloadListener;)V", ordinal = 17))

@@ -101,20 +101,19 @@ public abstract class GhostBlockRenderer {
                     alpha,
                     LevelRenderer.getLightColor(minecraft.level, pos),
                     OverlayTexture.NO_OVERLAY,
-                    ModelData.EMPTY,
                     minecraft.level.getRandom(),
                     renderType);
 
             ps.popPose();
         }
 
-        public static void renderModel(PoseStack.Pose pose, VertexConsumer consumer, BlockState state, BakedModel model, float red, float green, float blue, float alpha, int packedLight, int packedOverlay, ModelData extraData, RandomSource random, RenderType renderType) {
+        public static void renderModel(PoseStack.Pose pose, VertexConsumer consumer, BlockState state, BakedModel model, float red, float green, float blue, float alpha, int packedLight, int packedOverlay, RandomSource random, RenderType renderType) {
             for (Direction direction : Direction.values()) {
                 random.setSeed(42L);
-                renderQuadList(pose, consumer, red, green, blue, alpha, model.getQuads(state, direction, random, extraData, renderType), packedLight, packedOverlay);
+                renderQuadList(pose, consumer, red, green, blue, alpha, model.getQuads(state, direction, random), packedLight, packedOverlay);
             }
             random.setSeed(42L);
-            renderQuadList(pose, consumer, red, green, blue, alpha, model.getQuads(state, null, random, extraData, renderType), packedLight, packedOverlay);
+            renderQuadList(pose, consumer, red, green, blue, alpha, model.getQuads(state, null, random), packedLight, packedOverlay);
         }
 
         private static void renderQuadList(PoseStack.Pose pose, VertexConsumer consumer, float red, float green, float blue, float alpha, List<BakedQuad> quads, int packedLight, int packedOverlay) {
@@ -129,7 +128,7 @@ public abstract class GhostBlockRenderer {
                     g = 1.0F;
                     b = 1.0F;
                 }
-                consumer.putBulkData(pose, quad, r, g, b, alpha, packedLight, packedOverlay, true);
+                consumer.putBulkData(pose, quad, r, g, b, alpha, packedLight, packedOverlay);
             }
         }
     }

@@ -81,7 +81,7 @@ public class LodestoneBlockEntity extends BlockEntity implements BlockEntityExte
     //Sync
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
-        return writeClient(new CompoundTag());
+        return writeClient(new CompoundTag(), provider);
     }
 
     @Override
